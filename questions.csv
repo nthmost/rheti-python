@@ -1,3 +1,4 @@
+question,choice,text,value
 q1,a,"I've been romantic and imaginative",E
 q1,b,"I've been pragmatic and down to earth",B
 q2,a,"I have tended to take on confrontations",G
@@ -10,8 +11,8 @@ q5,a,"I have been a hospitable person and have enjoyed welcoming new friends int
 q5,b,"I have been a private person and have not mixed much with others",E
 q6,a,"It's been difficult for me to relax and stop worrying about potential problems",B
 q6,b,"It's been difficult for me to get myself worked up about potential problems",B
-q7,a,"I've been more of a \"street-smart\" survivor",G
-q7,b,"I've been more of a \"high-minded\" idealist,D
+q7,a,"I've been more of a street-smart survivor",G
+q7,b,"I've been more of a high-minded idealist",D
 q8,a,"I have needed to show affection to people",F
 q8,b,"I have preferred to maintain some distance with people",H
 q9,a,"When presented with a new experience, I've usually asked myself if it would be useful to me",D
@@ -22,4 +23,26 @@ q11,a,"Others have depended on my insight and knowledge",H
 q11,b,"Others have depended on my strength and decisiveness",G
 q12,a,"I have come across as being too unsure of myself",B
 q12,b,"I have come across as being too sure of myself",D
+q13,a,"I have been more relationship-oriented than goal-oriented",F
+q13,b,"I have been more goal-oriented than relationship-oriented",C
+q14,a,"I have not been able to speak up for myself very well",E
+q14,b,"I have been outspoke -- I've said what others wished they have the nerve to say",I
+q15,a,"It's been difficult for me to stop considering alternatives and do something definite",H
+q15,b,"It's been difficult for me to take it easy and be more flexible",D
+q16,a,"I have tended to be careful and hesitant",B
+q16,b,"I have tended to be bold and domineering",G
+q17,a,"My reluctance to get too involved has gotten me into trouble with people",A
+q17,b,"My eagerness to have people depend on me has gotten me into trouble with them",F
+q18,a,"Usually, I have been able to put my feelings aside to get the job done",C
+q18,b,"Usually, I have needed to work through my feelings before I could act",E
+q19,a,"Generally, I've been methodical and cautious",B
+q19,b,"Generally, I've been adventurous and taken risks",I
+q20,a,"I have tended to be a supportive, giving person who seeks intimacy with others",F
+q20,b,"I have tended to be a serious, resered person who likes discussing issues",D
+q21,a,"I've often felt the need to be a pillar of strength",G
+q21,b,"I've often felt the need to perform perfectly",C
+q22,a,"I've typically been interested in asking tough questions and maintaining my independence",H
+q22,b,"I've typically been interested in maintaining my stability and peace of mind",A
+q23,a,"I've been a bit cynical and skeptical",B
+q23,b,"I've been a bit mushy and sentimental",F
 

@@ -1,0 +1,25 @@
+q1,a,"I've been romantic and imaginative",E
+q1,b,"I've been pragmatic and down to earth",B
+q2,a,"I have tended to take on confrontations",G
+q2,b,"I have tended to avoid confrontations",A
+q3,a,"I have typically been diplomatic, charming, and ambitious",C
+q3,b,"I have typically been direct, formal, and idealistic",D
+q4,a,"I have tended to be focused and intense",H
+q4,b,"I have tended to be spontaneous and fun-loving",I
+q5,a,"I have been a hospitable person and have enjoyed welcoming new friends into my life",F
+q5,b,"I have been a private person and have not mixed much with others",E
+q6,a,"It's been difficult for me to relax and stop worrying about potential problems",B
+q6,b,"It's been difficult for me to get myself worked up about potential problems",B
+q7,a,"I've been more of a \"street-smart\" survivor",G
+q7,b,"I've been more of a \"high-minded\" idealist,D
+q8,a,"I have needed to show affection to people",F
+q8,b,"I have preferred to maintain some distance with people",H
+q9,a,"When presented with a new experience, I've usually asked myself if it would be useful to me",D
+q9,b,"When presented with a new experience, I've usually asked myself if it would be enjoyable",I
+q10,a,"I have tended to focus too much on myself",E
+q10,b,"I have tended to focus too much on others",A
+q11,a,"Others have depended on my insight and knowledge",H
+q11,b,"Others have depended on my strength and decisiveness",G
+q12,a,"I have come across as being too unsure of myself",B
+q12,b,"I have come across as being too sure of myself",D
+

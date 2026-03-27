@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Question {{ index + 1 }} of {{ total }} — RHETI{% endblock %}
+{% block content %}
+<div class="question-page">
+
+  <div class="progress-bar">
+    <div class="progress-fill" style="width: {{ pct }}%"></div>
+  </div>
+  <p class="progress-label">{{ index + 1 }} of {{ total }}</p>
+
+  <form method="post" action="{{ url_for('test.question') }}" class="question-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <p class="question-instruction">Which statement has been more true of you over the past year?</p>
+
+    {% for choice in question.choices %}
+    <label class="choice-card" for="choice-{{ choice.code }}">
+      <input type="radio" name="choice" id="choice-{{ choice.code }}"
+             value="{{ choice.code }}" required>
+      <span class="choice-letter">{{ choice.code }}</span>
+      <span class="choice-text">{{ choice.text }}</span>
+    </label>
+    {% endfor %}
+
+    <div class="question-nav">
+      <button type="submit" class="btn btn-primary">Next →</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Auto-advance on selection
+  document.querySelectorAll('input[name="choice"]').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.querySelector('.question-form').submit();
+    });
+  });
+</script>
+{% endblock %}

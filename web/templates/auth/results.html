@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}My Results — RHETI{% endblock %}
+{% block content %}
+{% set type_names = {
+  1: "The Reformer", 2: "The Helper", 3: "The Achiever",
+  4: "The Individualist", 5: "The Investigator", 6: "The Loyalist",
+  7: "The Enthusiast", 8: "The Challenger", 9: "The Peacemaker"
+} %}
+<div class="dashboard">
+  <h1>My Results</h1>
+  {% if results %}
+    {% for r in results %}
+    <a href="{{ url_for('test.results', result_id=r.id) }}" class="result-row result-row-large">
+      <span class="result-type">Type {{ r.top_type }} — {{ type_names[r.top_type] }}</span>
+      <span class="result-date">{{ r.completed_at.strftime('%B %d, %Y') }}</span>
+    </a>
+    {% endfor %}
+  {% else %}
+    <p>No results yet. <a href="{{ url_for('test.index') }}">Take the test →</a></p>
+  {% endif %}
+</div>
+{% endblock %}

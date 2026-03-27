@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Enneagram Personality Test{% endblock %}
+{% block content %}
+<div class="hero">
+  <h1>Know Your Type</h1>
+  <p class="lead">The Riso-Hudson Enneagram Type Indicator (RHETI) is the world's
+  most validated Enneagram personality test — 144 questions, 9 types, one result.</p>
+  <div class="hero-actions">
+    <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Create Account &amp; Take Test</a>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Log In</a>
+  </div>
+  <p class="hint">Free to take. Results saved to your account.</p>
+</div>
+
+<section class="types-grid">
+  {% set types = [
+    (1, "The Reformer",    "Principled, purposeful, self-controlled"),
+    (2, "The Helper",      "Generous, caring, people-pleasing"),
+    (3, "The Achiever",    "Adaptable, excelling, driven"),
+    (4, "The Individualist","Expressive, dramatic, self-aware"),
+    (5, "The Investigator","Perceptive, innovative, private"),
+    (6, "The Loyalist",    "Engaging, responsible, anxious"),
+    (7, "The Enthusiast",  "Spontaneous, versatile, scattered"),
+    (8, "The Challenger",  "Decisive, willful, confrontational"),
+    (9, "The Peacemaker",  "Receptive, reassuring, complacent"),
+  ] %}
+  {% for num, name, desc in types %}
+  <div class="type-card">
+    <span class="type-num">{{ num }}</span>
+    <strong>{{ name }}</strong>
+    <p>{{ desc }}</p>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

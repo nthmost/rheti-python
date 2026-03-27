@@ -1,0 +1,9 @@
+flask>=3.0
+flask-login>=0.6
+flask-mail>=0.10
+flask-sqlalchemy>=3.1
+flask-wtf>=1.2
+email-validator>=2.0
+pymupdf>=1.20
+Pillow>=10.0
+gunicorn>=21.0

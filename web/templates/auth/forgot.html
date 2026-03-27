@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Reset Password — RHETI{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <h1>Reset Password</h1>
+  <p>Enter your email and we'll send a reset link.</p>
+  <form method="post" class="auth-form">
+    {{ form.hidden_tag() }}
+    <div class="field">
+      {{ form.email.label }} {{ form.email(placeholder="you@example.com") }}
+      {% for e in form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary btn-full">Send Reset Link</button>
+  </form>
+  <p class="auth-links"><a href="{{ url_for('auth.login') }}">Back to login</a></p>
+</div>
+{% endblock %}

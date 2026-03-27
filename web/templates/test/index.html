@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — RHETI{% endblock %}
+{% block content %}
+<div class="dashboard">
+  <h1>Welcome{% if current_user.display_name %}, {{ current_user.display_name }}{% endif %}</h1>
+
+  <div class="card start-card">
+    <h2>Take the Test</h2>
+    <p>{{ n_questions }} questions &middot; about 20 minutes &middot; answer honestly</p>
+    <form method="post" action="{{ url_for('test.start') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn btn-primary btn-large">Start Test</button>
+    </form>
+    <p class="hint">Choose the statement that has been more true of you over the past year.</p>
+  </div>
+
+  {% if results %}
+  <div class="past-results">
+    <h2>Past Results</h2>
+    {% for r in results %}
+    <a href="{{ url_for('test.results', result_id=r.id) }}" class="result-row">
+      <span class="result-type">Type {{ r.top_type }}</span>
+      <span class="result-date">{{ r.completed_at.strftime('%b %d, %Y') }}</span>
+      <span class="result-qs">{{ r.n_questions }} questions</span>
+    </a>
+    {% endfor %}
+    <a href="{{ url_for('auth.my_results') }}" class="subtle-link">View all results →</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

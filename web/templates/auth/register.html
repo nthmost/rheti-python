@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Register — RHETI{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <h1>Create Account</h1>
+  <form method="post" class="auth-form">
+    {{ form.hidden_tag() }}
+    <div class="field">
+      {{ form.email.label }} {{ form.email(placeholder="you@example.com", autocomplete="email") }}
+      {% for e in form.email.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+    </div>
+    <div class="field">
+      {{ form.display_name.label }} {{ form.display_name(placeholder="Optional") }}
+    </div>
+    <div class="field">
+      {{ form.password.label }} {{ form.password(autocomplete="new-password") }}
+      {% for e in form.password.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+    </div>
+    <div class="field">
+      {{ form.confirm.label }} {{ form.confirm(autocomplete="new-password") }}
+      {% for e in form.confirm.errors %}<span class="field-error">{{ e }}</span>{% endfor %}
+    </div>
+    <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+  </form>
+  <p class="auth-links">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+</div>
+{% endblock %}

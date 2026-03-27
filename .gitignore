@@ -100,3 +100,7 @@ ve/
 
 # mypy
 .mypy_cache/
+venv/
+*.db
+.env
+__pycache__/

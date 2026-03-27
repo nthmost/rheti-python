@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}RHETI Enneagram Test{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-brand" href="{{ url_for('test.index') }}">Enneagram</a>
+    <div class="nav-links">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.my_results') }}">My Results</a>
+        <a href="{{ url_for('test.start') }}" onclick="return confirm('Start a new test? This will clear any test in progress.')">Take Test</a>
+        <a href="{{ url_for('auth.logout') }}">Log out</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}">Log in</a>
+        <a href="{{ url_for('auth.register') }}" class="btn-nav">Register</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <main class="main">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <p>Based on the Riso-Hudson Enneagram Type Indicator (RHETI v2.5)<br>
+    &copy; 1994, 2001 Don Richard Riso. All rights reserved.</p>
+  </footer>
+</body>
+</html>

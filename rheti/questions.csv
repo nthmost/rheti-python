@@ -68,6 +68,7 @@ q33,b,"When I've had conflicts with others, I've rarely backed down",G
 q34,a,I have given in too easily and let others push me around,A
 q34,b,I have been too uncompromising and demanding with others,D
 q35,a,I've been appreciated for my unsinkable spirit and resourcefulness,F
+q35,b,I've been appreciated for my deep caring and personal warmth,G
 q36,a,I have wanted to make a favorable impression on others,C
 q36,b,I have cared little about making a favorable impression on others,H
 q37,a,I've depended on my perseverance and common sense,B
@@ -111,6 +112,7 @@ q55,b,"I've been spontaneous, and have preferred to improvise as problems come u
 q56,a,I have gotten angry when others have not shown enough appreciation for what I have done for them,F
 q56,b,I have gotten angry when others have not listened to what I have told them,D
 q57,a,Being independent and self-reliant has been important to me,B
+q57,b,Being valued and admired has been important to me,C
 q58,a,"When I've debated with friends, I've tended to press my arguments forcefully",H
 q58,b,"When I've debated with friends, I've tended to let things go to prevent hard feelings",A
 q59,a,I have often been possessive of loved ones--I have had trouble letting them be,F
@@ -140,8 +142,11 @@ q70,b,"Generally, I have thought of myself as a serious, dignified person",H
 q71,a,I've had an agile mind and boundless energy,I
 q71,b,I've had a caring heart and deep dedication,F
 q72,a,I have pursued activities that had a substantial potential for reward and personal recognition,F
+q72,b,I have been willing to give up reward and personal recognition if it meant doing work I was really interested in,I
 q73,a,Fulfilling social obligations has seldom been high on my agenda,D
+q73,b,I have usually taken my social obligations very seriously,B
 q74,a,"In most situations, I have preferred to take the lead",B
+q74,b,"In most situations, I have preferred to let someone else take the lead",A
 q75,a,"Over the years, my values and lifestyle have changed several times",F
 q75,b,"Over the years, my values and lifestyle have remained fairly consistent",H
 q76,a,"Typically, I have not had much self-discipline",I
@@ -217,6 +222,7 @@ q110,b,"I have usually disliked being in high-pressure, even difficult, situatio
 q111,a,I've been proud of my ability to be flexible—what's appropriate or important often changes,C
 q111,b,I've been proud of my ability to take a stand—I've been firm about what I believe in,D
 q112,a,My style has leaned toward spareness and austerity,D
+q112,b,My style has leaned toward excess and over-doing things,I
 q113,a,My own health and well-being have suffered because of my strong desire to help others,D
 q113,b,My relationships have suffered because of my strong desire to attend to my personal needs,E
 q114,a,"Generally speaking, I've been too open and naive",A
@@ -238,6 +244,7 @@ q121,b,"In the past, I've probably kept too much distance in my friendships",C
 q122,a,I've had a tendency to keep thinking about things from the past,E
 q122,b,I've had a tendency to keep anticipating things I'm going to do,I
 q123,a,I've tended to see people as intrusive and demanding,H
+q123,b,I've tended to see people as disorganized and irresponsible,C
 q124,a,"Generally, I have not had much confidence in myself",C
 q124,b,"Generally, I have had confidence only in myself",E
 q125,a,I've probably been too passive and uninvolved,C
@@ -247,6 +254,7 @@ q126,b,I've rarely let self-doubt stand in my way,C
 q127,a,"Given a choice between something familiar and something new, I've usually chosen something new",C
 q127,b,I've generally chosen what I know I already liked: why be disappointed with something I might not like?,B
 q128,a,I have given a lot of physical contact to reassure others about how I feel about them,G
+q128,b,I have generally felt that real love does not depend on physical contact,D
 q129,a,"When I've needed to confront someone, I've often been too harsh and direct",I
 q129,b,"When I've needed to confront someone, I've often 'beaten around the bush' too much",C
 q130,a,"I have been attracted to subjects that others would probably find disturbing, even frightening",C
@@ -256,6 +264,7 @@ q131,b,I have gotten into trouble with people by being too evasive and uncommuni
 q132,a,I've worried that I don't have the resources to fulfill the responsibilities I've taken on,I
 q132,b,I've worried that I don't have the self-discipline to focus on what will really fulfill me,A
 q133,a,"Generally, I've been a highly intuitive, individualistic person",A
+q133,b,"Generally, I've been a highly organized, responsible person",F
 q134,a,Overcoming inertia has been one of my main problems,A
 q134,b,Being unable to slow down has been one of my main problems,I
 q135,a,"When I've felt insecure, I've reacted by becoming arrogant and dismissive",C

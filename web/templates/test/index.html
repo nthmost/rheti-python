@@ -4,6 +4,22 @@
 <div class="dashboard">
   <h1>Welcome{% if current_user.display_name %}, {{ current_user.display_name }}{% endif %}</h1>
 
+  {% if progress %}
+  <div class="card resume-card">
+    <h2>Continue Your Test</h2>
+    <p>You have a test in progress — {{ progress.q_index }} of {{ n_questions }} questions answered.</p>
+    <div class="resume-actions">
+      <form method="post" action="{{ url_for('test.resume') }}" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-primary btn-large">Resume →</button>
+      </form>
+      <form method="post" action="{{ url_for('test.start') }}" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-secondary">Start Fresh</button>
+      </form>
+    </div>
+  </div>
+  {% else %}
   <div class="card start-card">
     <h2>Take the Test</h2>
     <p>{{ n_questions }} questions &middot; about 20 minutes &middot; answer honestly</p>
@@ -13,6 +29,7 @@
     </form>
     <p class="hint">Choose the statement that has been more true of you over the past year.</p>
   </div>
+  {% endif %}
 
   {% if results %}
   <div class="past-results">

@@ -85,6 +85,10 @@ a:hover { text-decoration: underline; }
         box-shadow: var(--shadow); }
 .start-card h2 { margin-bottom: .4rem; }
 .start-card p  { color: var(--muted); margin-bottom: 1rem; }
+.resume-card { border-color: var(--accent); background: #f0f5f4; }
+.resume-card h2 { margin-bottom: .4rem; color: var(--accent); }
+.resume-card p  { color: var(--muted); margin-bottom: 1rem; }
+.resume-actions { display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
 .past-results h2 { margin-bottom: .75rem; }
 .result-row { display: flex; align-items: center; gap: 1rem; padding: .6rem .75rem;
               background: var(--surface); border: 1px solid var(--border);
@@ -125,7 +129,7 @@ a:hover { text-decoration: underline; }
 .results-label { font-size: .85rem; opacity: .8; text-transform: uppercase;
                  letter-spacing: .05em; margin-bottom: .25rem; }
 .results-hero h1 { font-size: 1.8rem; margin-bottom: .5rem; }
-.results-desc { opacity: .9; }
+.results-desc { opacity: .9; line-height: 1.7; font-size: .95rem; }
 
 .scores-section h2 { margin-bottom: 1rem; }
 .score-row { display: grid; grid-template-columns: 200px 1fr 2rem;

@@ -4,7 +4,7 @@ from flask import (Blueprint, render_template, redirect, url_for,
                    session, request, flash, abort)
 from flask_login import login_required, current_user
 from . import db
-from .models import Result
+from .models import Result, TestProgress
 
 bp = Blueprint('test', __name__)
 
@@ -33,25 +33,61 @@ def get_questions():
     return _questions_cache
 
 
+def _save_progress(answers, q_index):
+    """Upsert the user's in-progress test state to the database."""
+    prog = db.session.get(TestProgress, current_user.id) or \
+           TestProgress.query.filter_by(user_id=current_user.id).first()
+    if prog is None:
+        prog = TestProgress(user_id=current_user.id)
+        db.session.add(prog)
+    prog.answers = answers
+    prog.q_index = q_index
+    prog.updated_at = datetime.now(timezone.utc)
+    db.session.commit()
+
+
+def _delete_progress():
+    prog = TestProgress.query.filter_by(user_id=current_user.id).first()
+    if prog:
+        db.session.delete(prog)
+        db.session.commit()
+
+
 # --- Routes ---
 
 @bp.route('/')
 def index():
     if current_user.is_authenticated:
         questions = get_questions()
+        progress = TestProgress.query.filter_by(user_id=current_user.id).first()
         return render_template('test/index.html',
                                n_questions=len(questions),
-                               results=current_user.results[:3])
+                               results=current_user.results[:3],
+                               progress=progress)
     return render_template('test/landing.html')
 
 
 @bp.route('/start', methods=['POST'])
 @login_required
 def start():
-    """Begin a new test session."""
+    """Begin a new test session, discarding any saved progress."""
+    _delete_progress()
     session.clear()
     session['answers'] = []
     session['q_index'] = 0
+    return redirect(url_for('test.question'))
+
+
+@bp.route('/resume', methods=['POST'])
+@login_required
+def resume():
+    """Restore a saved in-progress test into the session."""
+    prog = TestProgress.query.filter_by(user_id=current_user.id).first()
+    if not prog:
+        return redirect(url_for('test.index'))
+    session.clear()
+    session['answers'] = prog.answers
+    session['q_index'] = prog.q_index
     return redirect(url_for('test.question'))
 
 
@@ -77,6 +113,11 @@ def question():
         answers.append({'q': q.qnum, 'choice': choice_code, 'value': chosen.value})
         session['answers'] = answers
         session['q_index'] = idx + 1
+
+        # Persist progress to DB every 5 questions
+        if (idx + 1) % 5 == 0:
+            _save_progress(answers, idx + 1)
+
         return redirect(url_for('test.question'))
 
     return render_template('test/question.html',
@@ -106,6 +147,7 @@ def finish():
         completed_at=datetime.now(timezone.utc),
     )
     db.session.add(result)
+    _delete_progress()
     db.session.commit()
 
     session.clear()

@@ -25,6 +25,19 @@ class User(UserMixin, db.Model):
         return f'<User {self.email}>'
 
 
+class TestProgress(db.Model):
+    """Persists in-progress test answers so the user can resume after a session loss."""
+    id          = db.Column(db.Integer, primary_key=True)
+    user_id     = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+    q_index     = db.Column(db.Integer, nullable=False, default=0)
+    answers     = db.Column(db.JSON, nullable=False, default=list)
+    updated_at  = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc),
+                            onupdate=lambda: datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f'<TestProgress user={self.user_id} q={self.q_index}>'
+
+
 class Result(db.Model):
     id           = db.Column(db.Integer, primary_key=True)
     user_id      = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

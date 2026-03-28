@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}The Nine Types — Enneagram{% endblock %}
+{% block content %}
+<div class="types-page">
+  <h1>The Nine Enneagram Types</h1>
+  <p class="lead" style="color: var(--muted); margin-bottom: 2.5rem;">
+    Each type reflects a distinct pattern of thinking, feeling, and behaving — a worldview shaped by a core desire and a core fear.
+  </p>
+
+  {% for num, name, desc in types %}
+  <div class="type-detail" id="type-{{ num }}">
+    <div class="type-detail-header">
+      <span class="type-num-large">{{ num }}</span>
+      <h2>{{ name }}</h2>
+    </div>
+    <p class="type-detail-body">{{ desc }}</p>
+  </div>
+  {% endfor %}
+
+  <div class="types-cta">
+    {% if current_user.is_authenticated %}
+      <form method="post" action="{{ url_for('test.start') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-primary btn-large">Take the Test</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-large">Create Account &amp; Take Test</a>
+      <a href="{{ url_for('auth.login') }}" class="btn btn-secondary">Log In</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

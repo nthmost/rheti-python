@@ -25,11 +25,11 @@
     (9, "The Peacemaker",  "Receptive, reassuring, complacent"),
   ] %}
   {% for num, name, desc in types %}
-  <div class="type-card">
+  <a href="{{ url_for('test.types') }}#type-{{ num }}" class="type-card">
     <span class="type-num">{{ num }}</span>
     <strong>{{ name }}</strong>
     <p>{{ desc }}</p>
-  </div>
+  </a>
   {% endfor %}
 </section>
 {% endblock %}

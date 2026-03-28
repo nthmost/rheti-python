@@ -144,6 +144,23 @@ a:hover { text-decoration: underline; }
 .score-note { margin-top: 1rem; font-size: .85rem; color: var(--muted); }
 .results-actions { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
 
+/* ── Types page ── */
+.types-page { max-width: 640px; }
+.types-page h1 { margin-bottom: .5rem; }
+.type-detail { border: 1px solid var(--border); border-radius: var(--radius);
+               padding: 1.25rem 1.5rem; margin-bottom: 1rem;
+               background: var(--surface); box-shadow: var(--shadow); }
+.type-detail-header { display: flex; align-items: center; gap: .9rem; margin-bottom: .75rem; }
+.type-num-large { font-size: 1.6rem; font-weight: 800; color: var(--accent);
+                  line-height: 1; min-width: 1.8rem; }
+.type-detail-header h2 { font-size: 1.1rem; margin: 0; }
+.type-detail-body { color: var(--muted); line-height: 1.7; font-size: .95rem; }
+.types-cta { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* make landing type cards clickable */
+a.type-card { text-decoration: none; color: var(--text); display: block; }
+a.type-card:hover { border-color: var(--accent); text-decoration: none; }
+
 /* ── Auth forms ── */
 .auth-page { max-width: 400px; margin: 0 auto; }
 .auth-page h1 { margin-bottom: 1.25rem; }

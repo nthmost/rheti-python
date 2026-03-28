@@ -10,6 +10,7 @@
   <nav class="nav">
     <a class="nav-brand" href="{{ url_for('test.index') }}">Enneagram</a>
     <div class="nav-links">
+      <a href="{{ url_for('test.types') }}">The Types</a>
       {% if current_user.is_authenticated %}
         <a href="{{ url_for('auth.my_results') }}">My Results</a>
         <a href="{{ url_for('test.start') }}" onclick="return confirm('Start a new test? This will clear any test in progress.')">Take Test</a>

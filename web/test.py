@@ -154,6 +154,23 @@ def finish():
     return redirect(url_for('test.results', result_id=result.id))
 
 
+@bp.route('/types')
+def types():
+    from rheti.scorer import TYPE_DESCRIPTIONS
+    types = [
+        (1, 'The Reformer',     TYPE_DESCRIPTIONS[1]),
+        (2, 'The Helper',       TYPE_DESCRIPTIONS[2]),
+        (3, 'The Achiever',     TYPE_DESCRIPTIONS[3]),
+        (4, 'The Individualist',TYPE_DESCRIPTIONS[4]),
+        (5, 'The Investigator', TYPE_DESCRIPTIONS[5]),
+        (6, 'The Loyalist',     TYPE_DESCRIPTIONS[6]),
+        (7, 'The Enthusiast',   TYPE_DESCRIPTIONS[7]),
+        (8, 'The Challenger',   TYPE_DESCRIPTIONS[8]),
+        (9, 'The Peacemaker',   TYPE_DESCRIPTIONS[9]),
+    ]
+    return render_template('test/types.html', types=types)
+
+
 @bp.route('/results/<int:result_id>')
 @login_required
 def results(result_id):

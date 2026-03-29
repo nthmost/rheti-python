@@ -56,11 +56,10 @@
     <div>
       <strong>Your scores are close</strong> —
       Type {{ diff_pair[0] }} and Type {{ diff_pair[1] }} are within a few points of each other.
-      This doesn't mean you're a mix of both — it means the test needs more information to tell them apart.
-      A short follow-up ({{ diff_pair[0] }} vs {{ diff_pair[1] }}) asks about motivation and fear, which are usually diagnostic.
+      A short follow-up asks about motivation and stress, which are usually diagnostic.
     </div>
     <a href="{{ url_for('test.differentiate', result_id=result.id) }}" class="btn btn-primary btn-sm">
-      Differentiate →
+      Motivation &amp; Stress →
     </a>
   </div>
   {% endif %}

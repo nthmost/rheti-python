@@ -3,7 +3,7 @@
 {% block content %}
 <div class="type-detail-page">
 
-  <div class="type-detail-hero type-hero-{{ num }}">
+  <div class="type-detail-hero">
     <div class="type-hero-num">{{ num }}</div>
     <div>
       <p class="type-hero-label">Enneagram Type {{ num }}</p>
@@ -22,14 +22,57 @@
 
     <section class="type-section">
       <h2>Wings</h2>
-      <p class="section-intro">Your dominant type is usually colored by one of its two neighboring types — called a <em>wing</em>.</p>
-      <div class="wings-grid">
-        {% for code, (wing_name, wing_desc) in wings.items() %}
-        <div class="wing-card">
-          <strong>{{ code }} — {{ wing_name }}</strong>
-          <p>{{ wing_desc }}</p>
+      <p class="section-intro">
+        Your dominant type is usually shaded by one of its two neighboring types, called a <em>wing</em>.
+        Most people find one wing resonates much more than the other — but both are worth reading.
+        The clearest way to tell them apart is to notice which <strong>emotional pattern</strong> fits
+        you better, and what happens to you <strong>under stress</strong>.
+      </p>
+
+      {% for code, detail in wing_detail.items() %}
+      <div class="wing-full" id="{{ code }}">
+        <div class="wing-full-header">
+          <span class="wing-code">{{ code }}</span>
+          <h3>{{ detail.name }}</h3>
         </div>
-        {% endfor %}
+        <p class="wing-summary">{{ detail.summary }}</p>
+
+        <div class="wing-subsections">
+          <div class="wing-sub">
+            <h4>Emotional Pattern</h4>
+            <p>{{ detail.emotion }}</p>
+          </div>
+          <div class="wing-sub">
+            <h4>Under Stress</h4>
+            <p>{{ detail.stress }}</p>
+          </div>
+          <div class="wing-sub">
+            <h4>Common Patterns</h4>
+            <ul>
+              {% for p in detail.patterns %}
+              <li>{{ p }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="wing-sub wing-check">
+            <h4>Ask Yourself</h4>
+            <ul>
+              {% for q in detail.self_check %}
+              <li>{{ q }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="wing-guidance">
+        <p>
+          <strong>Can't decide?</strong> That's normal — some people have a clear wing, others feel
+          balanced between both. You can also have one wing intellectually and another emotionally.
+          The goal isn't to pin down the right label but to use each description as a mirror.
+          If a pattern makes you slightly uncomfortable in a way that feels true, pay attention to that.
+        </p>
       </div>
     </section>
 

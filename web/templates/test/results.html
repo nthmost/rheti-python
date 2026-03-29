@@ -9,18 +9,59 @@
 } %}
 
 <div class="results-page">
-  <div class="results-hero type-{{ top_type }}">
+  <div class="results-hero">
     <p class="results-label">Your Dominant Type</p>
     <h1>Type {{ top_type }} — {{ top_name }}</h1>
     <p class="results-desc">{{ description }}</p>
+    <a href="{{ url_for('test.type_detail', type_num=top_type) }}" class="results-type-link">
+      Full type profile →
+    </a>
   </div>
+
+  {% if wing_info %}
+  <div class="wing-result-card">
+    <div class="wing-result-header">
+      <div>
+        <p class="wing-result-label">Probable Wing</p>
+        <h2>{{ wing_code }} — {{ wing_info.name }}</h2>
+      </div>
+      <div class="wing-result-scores">
+        {% for t in adj_scores %}
+        <div class="wing-adj-score {% if t == wing_type %}wing-adj-winner{% endif %}">
+          <span class="wing-adj-label">w{{ t }}</span>
+          <span class="wing-adj-count">{{ adj_scores[t] }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <p class="wing-result-summary">{{ wing_info.summary }}</p>
+    <div class="wing-result-emotion">
+      <h4>Your emotional pattern</h4>
+      <p>{{ wing_info.emotion }}</p>
+    </div>
+    <div class="wing-result-stress">
+      <h4>Under stress</h4>
+      <p>{{ wing_info.stress }}</p>
+    </div>
+    <div class="wing-result-footer">
+      <p class="wing-result-note">
+        This is inferred from your adjacent type scores. Read both
+        <a href="{{ url_for('test.type_detail', type_num=top_type) }}#{{ top_type }}w{{ adj_scores.keys()|list|first }}">{{ top_type }}w{{ adj_scores.keys()|list|first }}</a>
+        and
+        <a href="{{ url_for('test.type_detail', type_num=top_type) }}#{{ top_type }}w{{ adj_scores.keys()|list|last }}">{{ top_type }}w{{ adj_scores.keys()|list|last }}</a>
+        and see which feels more true — especially the emotional pattern and stress description.
+      </p>
+    </div>
+  </div>
+  {% endif %}
 
   <div class="scores-section">
     <h2>All Type Scores</h2>
     <div class="scores-list">
       {% set max_score = ranking[0][1] %}
       {% for type_num, count in ranking %}
-      <div class="score-row {% if type_num == top_type %}score-top{% endif %}">
+      <a href="{{ url_for('test.type_detail', type_num=type_num) }}"
+         class="score-row {% if type_num == top_type %}score-top{% endif %}">
         <span class="score-type">
           Type {{ type_num }} <span class="score-name">{{ type_names[type_num] }}</span>
         </span>
@@ -28,7 +69,7 @@
           <div class="score-bar" style="width: {{ (count / result.n_questions * 100) | round | int }}%"></div>
         </div>
         <span class="score-count">{{ count }}</span>
-      </div>
+      </a>
       {% endfor %}
     </div>
     <p class="score-note">{{ result.n_questions }} questions answered &middot;

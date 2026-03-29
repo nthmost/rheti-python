@@ -168,7 +168,7 @@ def type_detail(type_num):
         abort(404)
     from rheti.scorer import TYPE_DESCRIPTIONS
     from rheti.types import (TYPE_NAMES, TYPE_CENTER, CENTERS, ARROWS,
-                              STRESS_DESC, GROWTH_DESC, WINGS, LEVELS, FAMOUS)
+                              STRESS_DESC, GROWTH_DESC, WINGS, WING_DETAIL, LEVELS, FAMOUS)
     center_key = TYPE_CENTER[type_num]
     arrows = ARROWS[type_num]
     prev_type = type_num - 1 if type_num > 1 else 9
@@ -179,6 +179,7 @@ def type_detail(type_num):
                            description=TYPE_DESCRIPTIONS[type_num],
                            center=CENTERS[center_key],
                            wings=WINGS[type_num],
+                           wing_detail=WING_DETAIL[type_num],
                            stress_type=arrows['stress'],
                            stress_name=TYPE_NAMES[arrows['stress']],
                            stress_desc=STRESS_DESC[type_num],
@@ -200,6 +201,7 @@ def results(result_id):
         abort(404)
 
     from rheti.scorer import TYPE_MAP, TYPE_DESCRIPTIONS
+    from rheti.types import TYPE_NAMES, WING_DETAIL
     ranking = sorted(
         [(int(t), c) for t, c in result.scores.items()],
         key=lambda x: -x[1]
@@ -207,10 +209,23 @@ def results(result_id):
     top_type = result.top_type
     top_name = TYPE_MAP[[k for k,v in TYPE_MAP.items() if v[0]==top_type][0]][1]
 
+    # Probable wing: whichever adjacent type scored higher
+    scores = {int(t): c for t, c in result.scores.items()}
+    adj = [top_type - 1 if top_type > 1 else 9,
+           top_type + 1 if top_type < 9 else 1]
+    wing_type = max(adj, key=lambda t: scores.get(t, 0))
+    wing_code = f'{top_type}w{wing_type}'
+    wing_info = WING_DETAIL[top_type].get(wing_code)
+
     return render_template('test/results.html',
                            result=result,
                            ranking=ranking,
                            top_type=top_type,
                            top_name=top_name,
                            description=TYPE_DESCRIPTIONS[top_type],
-                           TYPE_MAP=TYPE_MAP)
+                           TYPE_MAP=TYPE_MAP,
+                           TYPE_NAMES=TYPE_NAMES,
+                           wing_type=wing_type,
+                           wing_code=wing_code,
+                           wing_info=wing_info,
+                           adj_scores={t: scores.get(t, 0) for t in adj})

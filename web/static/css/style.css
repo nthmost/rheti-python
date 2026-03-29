@@ -144,6 +144,21 @@ a:hover { text-decoration: underline; }
 .score-note { margin-top: 1rem; font-size: .85rem; color: var(--muted); }
 .results-actions { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
 
+/* ── Learn More section ── */
+.learn-section { margin-top: 3rem; }
+.learn-section h2 { margin-bottom: 1rem; }
+.learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; }
+@media (max-width: 540px) { .learn-grid { grid-template-columns: 1fr; } }
+.learn-card { display: flex; gap: .85rem; align-items: flex-start;
+              background: var(--surface); border: 1px solid var(--border);
+              border-radius: var(--radius); padding: 1rem 1.1rem;
+              color: var(--text); text-decoration: none;
+              box-shadow: var(--shadow); transition: border-color .15s; }
+.learn-card:hover { border-color: var(--accent); text-decoration: none; }
+.learn-icon { font-size: 1.4rem; line-height: 1; flex-shrink: 0; margin-top: .1rem; }
+.learn-card strong { display: block; margin-bottom: .2rem; }
+.learn-card p { font-size: .85rem; color: var(--muted); margin: 0; line-height: 1.5; }
+
 /* ── Types page ── */
 .types-page { max-width: 640px; }
 .types-page h1 { margin-bottom: .5rem; }

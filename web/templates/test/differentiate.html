@@ -8,8 +8,14 @@
   <div class="diff-header">
     <a href="{{ url_for('test.results', result_id=result.id) }}" class="subtle-link">← Back to results</a>
     {% if wing_mode %}
-    <p class="diff-context-label">Wing identification for Type {{ top_type }}</p>
-    {% endif %}
+      {% set wing_adj = type_a if type_a != top_type else type_b %}
+      {% set wing_far = type_b if type_a != top_type else type_a %}
+      <p class="diff-context-label">Wing identification — Type {{ top_type }}</p>
+      <h1>{{ top_type }}w{{ wing_adj }} or {{ top_type }}w{{ wing_far }}?</h1>
+      <div class="diff-intro">
+        <p>You're Type {{ top_type }}. These questions explore whether Type {{ wing_adj }} significantly shapes your personality — which would make you <strong>{{ top_type }}w{{ wing_adj }}</strong>. Answer based on what feels true, not what you think you should say.</p>
+      </div>
+    {% else %}
     <h1>{{ diff.title }}</h1>
     <div class="diff-scores">
       <span class="diff-score-pill">Type {{ type_a }}: {{ score_a }} pts</span>
@@ -23,6 +29,7 @@
         Motivation and stress behavior are usually the clearest differentiators.
       </p>
     </div>
+    {% endif %}
   </div>
 
   <form method="post" action="{{ url_for('test.differentiate', result_id=result.id, ta=type_a, tb=type_b) }}">

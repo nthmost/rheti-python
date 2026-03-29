@@ -370,10 +370,11 @@ def differentiate(result_id):
         type_a, type_b = min(ta, tb), max(ta, tb)
         score_a = scores.get(type_a, 0)
         score_b = scores.get(type_b, 0)
-        # Wing mode: both types are adjacent to top_type (i.e. we're identifying the wing)
+        # Wing mode: one of the pair is top_type, the other is adjacent to it
         adj_types = [top_type - 1 if top_type > 1 else 9,
                      top_type + 1 if top_type < 9 else 1]
-        wing_mode = (ta in adj_types and tb in adj_types)
+        wing_mode = ((ta == top_type and tb in adj_types) or
+                     (tb == top_type and ta in adj_types))
     else:
         type_a, type_b = top_type, second_type
         score_a, score_b = top_score, second_score

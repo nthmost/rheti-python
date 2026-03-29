@@ -236,6 +236,16 @@ def results(result_id):
             'growth_name': TYPE_NAMES[ARROWS[t]['growth']],
         }
 
+    # Differentiation CTA: top 2 types within DIFF_THRESHOLD points and we have questions for that pair
+    DIFF_THRESHOLD = 4
+    from rheti.differentiators import get_differentiator
+    diff_pair = None
+    if len(ranking) >= 2:
+        second_type, second_score = ranking[1][0], ranking[1][1]
+        if ranking[0][1] - second_score <= DIFF_THRESHOLD:
+            if get_differentiator(top_type, second_type):
+                diff_pair = (top_type, second_type)
+
     return render_template('test/results.html',
                            result=result,
                            ranking=ranking,
@@ -249,7 +259,8 @@ def results(result_id):
                            wing_type=wing_type,
                            wing_code=wing_code,
                            wing_info=wing_info,
-                           adj_scores={t: scores.get(t, 0) for t in adj})
+                           adj_scores={t: scores.get(t, 0) for t in adj},
+                           diff_pair=diff_pair)
 
 
 @bp.route('/results/<int:result_id>/review', methods=['GET', 'POST'])
@@ -312,3 +323,63 @@ def claim_type(result_id, type_num):
     db.session.commit()
     flash(f'Primary type set to Type {type_num}.', 'success')
     return redirect(url_for('test.results', result_id=result_id))
+
+
+DIFF_THRESHOLD = 4
+
+@bp.route('/results/<int:result_id>/differentiate', methods=['GET', 'POST'])
+@login_required
+def differentiate(result_id):
+    result = db.session.get(Result, result_id)
+    if not result or result.user_id != current_user.id:
+        abort(404)
+
+    from rheti.differentiators import get_differentiator
+    from rheti.types import TYPE_NAMES
+    from collections import Counter
+
+    scores = {int(t): c for t, c in result.scores.items()}
+    ranking = sorted(scores.items(), key=lambda x: -x[1])
+    top_type, top_score = ranking[0]
+    second_type, second_score = ranking[1]
+
+    if top_score - second_score > DIFF_THRESHOLD:
+        flash('Your scores are clear enough — no differentiation needed.', 'info')
+        return redirect(url_for('test.results', result_id=result_id))
+
+    diff = get_differentiator(top_type, second_type)
+    if not diff:
+        flash('No differentiation questions available for this pair.', 'info')
+        return redirect(url_for('test.results', result_id=result_id))
+
+    if request.method == 'POST':
+        counts = Counter()
+        answered = 0
+        for i in range(len(diff['questions'])):
+            val = request.form.get(f'dq_{i}')
+            if val and val.isdigit():
+                counts[int(val)] += 1
+                answered += 1
+
+        if answered == 0:
+            flash('Please answer at least one question.', 'error')
+        else:
+            recommended = counts.most_common(1)[0][0]
+            return render_template('test/differentiate.html',
+                                   result=result,
+                                   diff=diff,
+                                   type_a=top_type, type_b=second_type,
+                                   score_a=top_score, score_b=second_score,
+                                   TYPE_NAMES=TYPE_NAMES,
+                                   done=True,
+                                   counts=counts,
+                                   recommended=recommended,
+                                   answered=answered)
+
+    return render_template('test/differentiate.html',
+                           result=result,
+                           diff=diff,
+                           type_a=top_type, type_b=second_type,
+                           score_a=top_score, score_b=second_score,
+                           TYPE_NAMES=TYPE_NAMES,
+                           done=False)

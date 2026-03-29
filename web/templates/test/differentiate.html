@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}{{ diff.title }} — Enneagram{% endblock %}
+{% block content %}
+<div class="diff-page">
+
+  {% if not done %}
+
+  <div class="diff-header">
+    <a href="{{ url_for('test.results', result_id=result.id) }}" class="subtle-link">← Back to results</a>
+    <h1>{{ diff.title }}</h1>
+    <div class="diff-scores">
+      <span class="diff-score-pill">Type {{ type_a }}: {{ score_a }} pts</span>
+      <span class="diff-score-sep">vs</span>
+      <span class="diff-score-pill">Type {{ type_b }}: {{ score_b }} pts</span>
+    </div>
+    <div class="diff-intro">
+      <p>{{ diff.intro }}</p>
+      <p class="diff-intro-note">
+        These questions focus on <strong>why</strong> you do things — your internal experience,
+        not your behavior. Two people can act identically on the outside for completely different
+        internal reasons. Answer based on what feels true about your inner life, not what you
+        think you should say.
+      </p>
+    </div>
+  </div>
+
+  <form method="post" action="{{ url_for('test.differentiate', result_id=result.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="diff-questions">
+      {% for q in diff.questions %}
+      {% set qi = loop.index0 %}
+      <div class="diff-q">
+        <p class="diff-q-stem">{{ loop.index }}. {{ q.stem }}</p>
+        <div class="diff-options">
+          {% for type_num, text in q.options %}
+          <label class="diff-option" for="dq{{ qi }}-{{ type_num }}">
+            <input type="radio" name="dq_{{ qi }}"
+                   id="dq{{ qi }}-{{ type_num }}" value="{{ type_num }}" required>
+            <span class="diff-option-text">{{ text }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="diff-submit">
+      <button type="submit" class="btn btn-primary btn-large">See My Result</button>
+    </div>
+  </form>
+
+  {% else %}
+
+  <div class="diff-result">
+    <div class="diff-result-hero {% if recommended == type_a %}diff-hero-a{% else %}diff-hero-b{% endif %}">
+      <p class="diff-result-label">Your answers point to</p>
+      <h1>Type {{ recommended }} — {{ TYPE_NAMES[recommended] }}</h1>
+      <p class="diff-tally">
+        {{ counts[recommended] }} of {{ answered }} answers pointed here
+        {% if counts[type_a if recommended == type_b else type_b] > 0 %}
+          ({{ counts[type_a if recommended == type_b else type_b] }} pointed to Type {{ type_a if recommended == type_b else type_b }})
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="diff-result-body">
+      {% set other = type_b if recommended == type_a else type_a %}
+      {% if counts[recommended] == counts[other] %}
+      <div class="diff-still-tied">
+        <p>Your answers were split evenly — this pair may genuinely be hard to tell apart for you right now.
+        Read both full type profiles carefully, paying particular attention to the <strong>stress description</strong>
+        and the <strong>emotional pattern</strong> section. Which feels more uncomfortably accurate?</p>
+      </div>
+      {% elif counts[recommended] == answered %}
+      <p>Your answers were unanimous. That's a strong signal.</p>
+      {% else %}
+      <p>The split wasn't total — a few answers leaned toward Type {{ other }}.
+         That's worth noting: read the Type {{ other }} description too, particularly
+         the <a href="{{ url_for('test.type_detail', type_num=other) }}#{{ other }}w{{ recommended }}">{{ other }}w{{ recommended }} wing variant</a>,
+         which is the version of Type {{ other }} most influenced by Type {{ recommended }}.</p>
+      {% endif %}
+
+      <div class="diff-result-actions">
+        <a href="{{ url_for('test.type_detail', type_num=recommended) }}" class="btn btn-primary">
+          Read the Type {{ recommended }} profile
+        </a>
+        {% if result.top_type != recommended %}
+        <form method="post" action="{{ url_for('test.claim_type', result_id=result.id, type_num=recommended) }}" style="display:inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-secondary">Set Type {{ recommended }} as my primary</button>
+        </form>
+        {% endif %}
+        <a href="{{ url_for('test.results', result_id=result.id) }}" class="btn btn-secondary">Back to results</a>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+</div>
+
+{% endblock %}

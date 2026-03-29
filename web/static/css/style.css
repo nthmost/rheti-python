@@ -358,6 +358,55 @@ a.type-card:hover { border-color: var(--accent); text-decoration: none; }
                   display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
 .review-change-count { font-size: .85rem; color: var(--warn); font-weight: 600; }
 
+/* ── Differentiation CTA banner (results page) ── */
+.diff-cta-banner { display: flex; align-items: center; justify-content: space-between;
+                   gap: 1rem; flex-wrap: wrap;
+                   background: #f0f5f4; border: 1.5px solid var(--accent);
+                   border-radius: var(--radius); padding: 1rem 1.25rem;
+                   margin-bottom: 1.25rem; font-size: .9rem; color: var(--muted); }
+.diff-cta-banner strong { color: var(--text); }
+
+/* ── Differentiation test page ── */
+.diff-page { max-width: 660px; }
+.diff-header { margin-bottom: 2rem; }
+.diff-header h1 { margin: .5rem 0 .75rem; }
+.diff-scores { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
+.diff-score-pill { background: var(--surface); border: 1px solid var(--border);
+                   border-radius: 99px; padding: .3rem .85rem; font-size: .85rem;
+                   font-weight: 600; }
+.diff-score-sep { color: var(--muted); font-size: .85rem; }
+.diff-intro { background: #fafaf6; border: 1px solid var(--border);
+              border-radius: var(--radius); padding: 1rem 1.25rem; }
+.diff-intro p { font-size: .9rem; color: var(--muted); line-height: 1.7; margin-bottom: .6rem; }
+.diff-intro p:last-child { margin-bottom: 0; }
+.diff-intro-note { font-style: italic; }
+
+.diff-questions { display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 2rem; }
+.diff-q-stem { font-weight: 600; margin-bottom: .75rem; line-height: 1.5; }
+.diff-options { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+@media (max-width: 560px) { .diff-options { grid-template-columns: 1fr; } }
+.diff-option { display: flex; align-items: flex-start; gap: .6rem;
+               border: 1.5px solid var(--border); border-radius: var(--radius);
+               padding: .85rem 1rem; cursor: pointer; background: var(--bg);
+               transition: border-color .12s, background .12s; }
+.diff-option:hover { border-color: var(--accent); background: #f0f5f4; }
+.diff-option input[type="radio"] { margin-top: .2rem; accent-color: var(--accent); flex-shrink: 0; }
+.diff-option:has(input:checked) { border-color: var(--accent); background: #f0f5f4; }
+.diff-option-text { font-size: .88rem; line-height: 1.5; color: var(--text); }
+.diff-submit { padding-top: 1rem; border-top: 1px solid var(--border); }
+
+.diff-result-hero { background: var(--accent); color: #fff; border-radius: var(--radius);
+                    padding: 2rem; margin-bottom: 1.5rem; }
+.diff-result-label { font-size: .8rem; text-transform: uppercase; letter-spacing: .07em;
+                     opacity: .8; margin-bottom: .25rem; }
+.diff-result-hero h1 { font-size: 1.7rem; margin-bottom: .4rem; }
+.diff-tally { opacity: .85; font-size: .9rem; }
+.diff-result-body { font-size: .92rem; color: var(--muted); line-height: 1.7; }
+.diff-result-body > p { margin-bottom: 1rem; }
+.diff-still-tied { background: #fefaf0; border: 1px solid var(--warn);
+                   border-radius: var(--radius); padding: 1rem 1.1rem; margin-bottom: 1rem; }
+.diff-result-actions { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.5rem; }
+
 /* ── Auth forms ── */
 .auth-page { max-width: 400px; margin: 0 auto; }
 .auth-page h1 { margin-bottom: 1.25rem; }

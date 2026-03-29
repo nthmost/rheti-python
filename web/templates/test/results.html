@@ -51,6 +51,20 @@
   </div>
   {% endif %}
 
+  {% if diff_pair and tied_types|length <= 1 %}
+  <div class="diff-cta-banner">
+    <div>
+      <strong>Your scores are close</strong> —
+      Type {{ diff_pair[0] }} and Type {{ diff_pair[1] }} are within a few points of each other.
+      This doesn't mean you're a mix of both — it means the test needs more information to tell them apart.
+      A short follow-up ({{ diff_pair[0] }} vs {{ diff_pair[1] }}) asks about motivation and fear, which are usually diagnostic.
+    </div>
+    <a href="{{ url_for('test.differentiate', result_id=result.id) }}" class="btn btn-primary btn-sm">
+      Differentiate →
+    </a>
+  </div>
+  {% endif %}
+
   <div class="results-hero">
     <p class="results-label">{% if tied_types|length > 1 %}Primary Type (tied){% else %}Your Dominant Type{% endif %}</p>
     <h1>Type {{ top_type }} — {{ top_name }}</h1>

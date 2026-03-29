@@ -112,10 +112,14 @@ def score(answers):
 
     ranking = sorted(
         [(num, TYPE_MAP[l][1], type_counts[num]) for l, (num, _) in TYPE_MAP.items()],
-        key=lambda x: (-x[2], x[0])
+        key=lambda x: -x[2]
     )
 
-    top_type, top_name, top_count = ranking[0]
+    top_count = ranking[0][2]
+    tied = [(num, name, count) for num, name, count in ranking if count == top_count]
+    # For storage, pick the lowest type number among tied — but expose all tied types
+    top_type = tied[0][0]
+    top_name = tied[0][1]
 
     return {
         'counts': type_counts,
@@ -123,4 +127,5 @@ def score(answers):
         'top_name': top_name,
         'description': TYPE_DESCRIPTIONS[top_type],
         'ranking': ranking,
+        'tied_types': [num for num, _, _ in tied],  # list of type nums at top score
     }

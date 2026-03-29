@@ -9,8 +9,42 @@
 } %}
 
 <div class="results-page">
+
+  {% if tied_types|length > 1 %}
+  <div class="tie-banner">
+    <h2>Your scores show a tie</h2>
+    <p>
+      You scored equally on
+      {% for t in tied_types %}
+        <strong>Type {{ t }} ({{ tie_context[t].name }})</strong>{% if not loop.last %} and {% endif %}
+      {% endfor %}
+      — both at <strong>{{ ranking[0][1] }}</strong> points.
+      This is meaningful data: it means your personality draws genuinely from both types.
+    </p>
+    <p>
+      The clearest way to tell them apart is <strong>stress behavior</strong> and <strong>emotional pattern</strong>.
+      Read both type profiles and ask yourself: which stress description feels uncomfortably familiar?
+    </p>
+    <div class="tie-types">
+      {% for t in tied_types %}
+      <div class="tie-type-card">
+        <a href="{{ url_for('test.type_detail', type_num=t) }}" class="tie-type-heading">
+          Type {{ t }} — {{ tie_context[t].name }}
+        </a>
+        <p class="tie-center">{{ tie_context[t].center }}</p>
+        <div class="tie-arrows">
+          <span>Under stress → <a href="{{ url_for('test.type_detail', type_num=tie_context[t].stress_type) }}">Type {{ tie_context[t].stress_type }}: {{ tie_context[t].stress_name }}</a></span>
+          <span>In growth → <a href="{{ url_for('test.type_detail', type_num=tie_context[t].growth_type) }}">Type {{ tie_context[t].growth_type }}: {{ tie_context[t].growth_name }}</a></span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="tie-note">Results below show Type {{ top_type }} as primary — change this by adjusting your answers.</p>
+  </div>
+  {% endif %}
+
   <div class="results-hero">
-    <p class="results-label">Your Dominant Type</p>
+    <p class="results-label">{% if tied_types|length > 1 %}Primary Type (tied){% else %}Your Dominant Type{% endif %}</p>
     <h1>Type {{ top_type }} — {{ top_name }}</h1>
     <p class="results-desc">{{ description }}</p>
     <a href="{{ url_for('test.type_detail', type_num=top_type) }}" class="results-type-link">

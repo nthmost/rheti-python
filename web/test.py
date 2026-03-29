@@ -201,21 +201,40 @@ def results(result_id):
         abort(404)
 
     from rheti.scorer import TYPE_MAP, TYPE_DESCRIPTIONS
-    from rheti.types import TYPE_NAMES, WING_DETAIL
+    from rheti.types import TYPE_NAMES, WING_DETAIL, ARROWS, CENTERS, TYPE_CENTER
     ranking = sorted(
         [(int(t), c) for t, c in result.scores.items()],
         key=lambda x: -x[1]
     )
+    scores = {int(t): c for t, c in result.scores.items()}
+    top_score = ranking[0][1]
+    tied_types = [t for t, c in ranking if c == top_score]
     top_type = result.top_type
-    top_name = TYPE_MAP[[k for k,v in TYPE_MAP.items() if v[0]==top_type][0]][1]
+
+    # If stored top_type isn't in the current tied set (stale data), recompute
+    if top_type not in tied_types:
+        top_type = tied_types[0]
+
+    top_name = TYPE_NAMES[top_type]
 
     # Probable wing: whichever adjacent type scored higher
-    scores = {int(t): c for t, c in result.scores.items()}
     adj = [top_type - 1 if top_type > 1 else 9,
            top_type + 1 if top_type < 9 else 1]
     wing_type = max(adj, key=lambda t: scores.get(t, 0))
     wing_code = f'{top_type}w{wing_type}'
     wing_info = WING_DETAIL[top_type].get(wing_code)
+
+    # Build tie context: stress arrow + center for each tied type
+    tie_context = {}
+    for t in tied_types:
+        tie_context[t] = {
+            'name': TYPE_NAMES[t],
+            'center': CENTERS[TYPE_CENTER[t]]['name'],
+            'stress_type': ARROWS[t]['stress'],
+            'stress_name': TYPE_NAMES[ARROWS[t]['stress']],
+            'growth_type': ARROWS[t]['growth'],
+            'growth_name': TYPE_NAMES[ARROWS[t]['growth']],
+        }
 
     return render_template('test/results.html',
                            result=result,
@@ -225,6 +244,8 @@ def results(result_id):
                            description=TYPE_DESCRIPTIONS[top_type],
                            TYPE_MAP=TYPE_MAP,
                            TYPE_NAMES=TYPE_NAMES,
+                           tied_types=tied_types,
+                           tie_context=tie_context,
                            wing_type=wing_type,
                            wing_code=wing_code,
                            wing_info=wing_info,
@@ -250,11 +271,14 @@ def review_result(result_id):
 
         if len(new_answers) == len(questions):
             from rheti.scorer import score
+            from sqlalchemy.orm.attributes import flag_modified
             result_data = score([a['value'] for a in new_answers])
             result.answers = new_answers
             result.top_type = result_data['top_type']
             result.scores = {str(t): c for t, c in result_data['counts'].items()}
             result.n_questions = len(new_answers)
+            flag_modified(result, 'answers')
+            flag_modified(result, 'scores')
             db.session.commit()
             flash('Answers updated and results recalculated.', 'success')
             return redirect(url_for('test.results', result_id=result_id))

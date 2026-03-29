@@ -177,6 +177,22 @@ a:hover { text-decoration: underline; }
 a.type-card { text-decoration: none; color: var(--text); display: block; }
 a.type-card:hover { border-color: var(--accent); text-decoration: none; }
 
+/* ── Tie banner ── */
+.tie-banner { background: #fefaf0; border: 2px solid var(--warn); border-radius: var(--radius);
+              padding: 1.5rem; margin-bottom: 1.5rem; }
+.tie-banner h2 { font-size: 1.15rem; color: var(--warn); margin-bottom: .6rem; }
+.tie-banner > p { font-size: .9rem; color: var(--muted); line-height: 1.65; margin-bottom: .75rem; }
+.tie-types { display: grid; grid-template-columns: 1fr 1fr; gap: .85rem; margin: 1rem 0; }
+@media (max-width: 500px) { .tie-types { grid-template-columns: 1fr; } }
+.tie-type-card { background: var(--surface); border: 1px solid var(--border);
+                 border-radius: var(--radius); padding: 1rem; }
+.tie-type-heading { font-weight: 700; font-size: 1rem; color: var(--text); text-decoration: none;
+                    display: block; margin-bottom: .25rem; }
+.tie-type-heading:hover { color: var(--accent); text-decoration: none; }
+.tie-center { font-size: .8rem; color: var(--muted); margin-bottom: .6rem; }
+.tie-arrows { display: flex; flex-direction: column; gap: .3rem; font-size: .83rem; color: var(--muted); }
+.tie-note { font-size: .8rem; color: var(--muted); font-style: italic; margin: 0; }
+
 /* ── Wing result card (results page) ── */
 .wing-result-card { background: var(--surface); border: 2px solid var(--accent);
                     border-radius: var(--radius); padding: 1.5rem; margin: 1.5rem 0;

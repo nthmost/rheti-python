@@ -27,7 +27,7 @@
     </p>
     <div class="tie-types">
       {% for t in tied_types %}
-      <div class="tie-type-card">
+      <div class="tie-type-card {% if t == top_type %}tie-type-current{% endif %}">
         <a href="{{ url_for('test.type_detail', type_num=t) }}" class="tie-type-heading">
           Type {{ t }} — {{ tie_context[t].name }}
         </a>
@@ -36,6 +36,14 @@
           <span>Under stress → <a href="{{ url_for('test.type_detail', type_num=tie_context[t].stress_type) }}">Type {{ tie_context[t].stress_type }}: {{ tie_context[t].stress_name }}</a></span>
           <span>In growth → <a href="{{ url_for('test.type_detail', type_num=tie_context[t].growth_type) }}">Type {{ tie_context[t].growth_type }}: {{ tie_context[t].growth_name }}</a></span>
         </div>
+        {% if t != top_type %}
+        <form method="post" action="{{ url_for('test.claim_type', result_id=result.id, type_num=t) }}" style="margin-top:.75rem">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-primary btn-sm">This is my type</button>
+        </form>
+        {% else %}
+        <p class="tie-current-label">← currently primary</p>
+        {% endif %}
       </div>
       {% endfor %}
     </div>

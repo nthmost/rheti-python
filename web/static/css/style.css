@@ -192,6 +192,9 @@ a.type-card:hover { border-color: var(--accent); text-decoration: none; }
 .tie-center { font-size: .8rem; color: var(--muted); margin-bottom: .6rem; }
 .tie-arrows { display: flex; flex-direction: column; gap: .3rem; font-size: .83rem; color: var(--muted); }
 .tie-note { font-size: .8rem; color: var(--muted); font-style: italic; margin: 0; }
+.tie-type-current { border-color: var(--accent); }
+.tie-current-label { font-size: .8rem; color: var(--accent); margin-top: .6rem; margin-bottom: 0; }
+.btn-sm { padding: .3rem .75rem; font-size: .85rem; }
 
 /* ── Wing result card (results page) ── */
 .wing-result-card { background: var(--surface); border: 2px solid var(--accent);

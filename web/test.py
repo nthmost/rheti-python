@@ -290,3 +290,25 @@ def review_result(result_id):
                            result=result,
                            questions=questions,
                            current_answers=current_answers)
+
+
+@bp.route('/results/<int:result_id>/claim/<int:type_num>', methods=['POST'])
+@login_required
+def claim_type(result_id, type_num):
+    """Let the user manually set their primary type when scores are tied."""
+    result = db.session.get(Result, result_id)
+    if not result or result.user_id != current_user.id:
+        abort(404)
+    if type_num not in range(1, 10):
+        abort(400)
+    scores = {int(t): c for t, c in result.scores.items()}
+    top_score = max(scores.values())
+    if scores.get(type_num, 0) < top_score:
+        flash('That type is not tied for your top score.', 'error')
+        return redirect(url_for('test.results', result_id=result_id))
+    result.top_type = type_num
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(result, 'scores')
+    db.session.commit()
+    flash(f'Primary type set to Type {type_num}.', 'success')
+    return redirect(url_for('test.results', result_id=result_id))

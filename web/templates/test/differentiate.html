@@ -7,6 +7,9 @@
 
   <div class="diff-header">
     <a href="{{ url_for('test.results', result_id=result.id) }}" class="subtle-link">← Back to results</a>
+    {% if wing_mode %}
+    <p class="diff-context-label">Wing identification for Type {{ top_type }}</p>
+    {% endif %}
     <h1>{{ diff.title }}</h1>
     <div class="diff-scores">
       <span class="diff-score-pill">Type {{ type_a }}: {{ score_a }} pts</span>
@@ -22,7 +25,12 @@
     </div>
   </div>
 
-  <form method="post" action="{{ url_for('test.differentiate', result_id=result.id) }}">
+  {% if wing_mode %}
+  {% set _form_action = url_for('test.differentiate', result_id=result.id, ta=type_a, tb=type_b) %}
+  {% else %}
+  {% set _form_action = url_for('test.differentiate', result_id=result.id) %}
+  {% endif %}
+  <form method="post" action="{{ _form_action }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="diff-questions">
@@ -47,6 +55,49 @@
       <button type="submit" class="btn btn-primary btn-large">See My Result</button>
     </div>
   </form>
+
+  {% else %}
+
+  {% if wing_mode %}
+
+  <div class="diff-result">
+    <div class="diff-result-hero {% if recommended == type_a %}diff-hero-a{% else %}diff-hero-b{% endif %}">
+      <p class="diff-result-label">Your wing appears to be</p>
+      <h1>{{ wing_code }} — {{ TYPE_NAMES[recommended] }} wing</h1>
+      <p class="diff-tally">
+        {{ counts[recommended] }} of {{ answered }} answers pointed to Type {{ recommended }}
+        {% set other_wing = type_b if recommended == type_a else type_a %}
+        {% if counts[other_wing] > 0 %}
+          ({{ counts[other_wing] }} pointed to Type {{ other_wing }})
+        {% endif %}
+      </p>
+    </div>
+
+    <div class="diff-result-body">
+      {% set other_wing = type_b if recommended == type_a else type_a %}
+      {% if counts[recommended] == counts[other_wing] %}
+      <div class="diff-still-tied">
+        <p>Your answers were split evenly. Read both
+          <a href="{{ url_for('test.type_detail', type_num=top_type) }}#{{ top_type }}w{{ type_a }}">{{ top_type }}w{{ type_a }}</a>
+          and
+          <a href="{{ url_for('test.type_detail', type_num=top_type) }}#{{ top_type }}w{{ type_b }}">{{ top_type }}w{{ type_b }}</a>
+          — the <strong>emotional pattern</strong> and <strong>stress behavior</strong> sections are usually the clearest tell.</p>
+      </div>
+      {% elif counts[recommended] == answered %}
+      <p>Your answers were unanimous. That's a strong signal.</p>
+      {% else %}
+      <p>Not unanimous — a few answers leaned toward {{ top_type }}w{{ other_wing }}.
+         Read both variants and see which emotional pattern feels more persistently true.</p>
+      {% endif %}
+
+      <div class="diff-result-actions">
+        <a href="{{ url_for('test.type_detail', type_num=top_type) }}#{{ wing_code }}" class="btn btn-primary">
+          Read the {{ wing_code }} profile
+        </a>
+        <a href="{{ url_for('test.results', result_id=result.id) }}" class="btn btn-secondary">Back to results</a>
+      </div>
+    </div>
+  </div>
 
   {% else %}
 
@@ -93,6 +144,8 @@
       </div>
     </div>
   </div>
+
+  {% endif %}
 
   {% endif %}
 </div>

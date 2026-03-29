@@ -238,6 +238,7 @@ def results(result_id):
 
     # Differentiation CTA: top 2 types within DIFF_THRESHOLD points and we have questions for that pair
     DIFF_THRESHOLD = 4
+    WING_DIFF_THRESHOLD = 3
     from rheti.differentiators import get_differentiator
     diff_pair = None
     if len(ranking) >= 2:
@@ -245,6 +246,15 @@ def results(result_id):
         if ranking[0][1] - second_score <= DIFF_THRESHOLD:
             if get_differentiator(top_type, second_type):
                 diff_pair = (top_type, second_type)
+
+    # Wing differentiation CTA: adjacent type scores are close
+    wing_diff_pair = None
+    if len(adj) == 2:
+        adj_s0 = scores.get(adj[0], 0)
+        adj_s1 = scores.get(adj[1], 0)
+        if abs(adj_s0 - adj_s1) <= WING_DIFF_THRESHOLD:
+            if get_differentiator(adj[0], adj[1]):
+                wing_diff_pair = (adj[0], adj[1])
 
     return render_template('test/results.html',
                            result=result,
@@ -260,7 +270,8 @@ def results(result_id):
                            wing_code=wing_code,
                            wing_info=wing_info,
                            adj_scores={t: scores.get(t, 0) for t in adj},
-                           diff_pair=diff_pair)
+                           diff_pair=diff_pair,
+                           wing_diff_pair=wing_diff_pair)
 
 
 @bp.route('/results/<int:result_id>/review', methods=['GET', 'POST'])
@@ -343,11 +354,25 @@ def differentiate(result_id):
     top_type, top_score = ranking[0]
     second_type, second_score = ranking[1]
 
-    if top_score - second_score > DIFF_THRESHOLD:
-        flash('Your scores are clear enough — no differentiation needed.', 'info')
-        return redirect(url_for('test.results', result_id=result_id))
+    # Wing mode: explicit pair passed as query params (ta, tb are adjacent types)
+    ta = request.args.get('ta', type=int)
+    tb = request.args.get('tb', type=int)
+    wing_mode = False
 
-    diff = get_differentiator(top_type, second_type)
+    if ta and tb and ta in range(1, 10) and tb in range(1, 10) and ta != tb:
+        type_a, type_b = min(ta, tb), max(ta, tb)
+        score_a = scores.get(type_a, 0)
+        score_b = scores.get(type_b, 0)
+        wing_mode = True
+    else:
+        type_a, type_b = top_type, second_type
+        score_a, score_b = top_score, second_score
+
+        if top_score - second_score > DIFF_THRESHOLD:
+            flash('Your scores are clear enough — no differentiation needed.', 'info')
+            return redirect(url_for('test.results', result_id=result_id))
+
+    diff = get_differentiator(type_a, type_b)
     if not diff:
         flash('No differentiation questions available for this pair.', 'info')
         return redirect(url_for('test.results', result_id=result_id))
@@ -365,21 +390,27 @@ def differentiate(result_id):
             flash('Please answer at least one question.', 'error')
         else:
             recommended = counts.most_common(1)[0][0]
+            wing_code = f'{top_type}w{recommended}' if wing_mode else None
             return render_template('test/differentiate.html',
                                    result=result,
                                    diff=diff,
-                                   type_a=top_type, type_b=second_type,
-                                   score_a=top_score, score_b=second_score,
+                                   type_a=type_a, type_b=type_b,
+                                   score_a=score_a, score_b=score_b,
                                    TYPE_NAMES=TYPE_NAMES,
                                    done=True,
                                    counts=counts,
                                    recommended=recommended,
-                                   answered=answered)
+                                   answered=answered,
+                                   wing_mode=wing_mode,
+                                   top_type=top_type,
+                                   wing_code=wing_code)
 
     return render_template('test/differentiate.html',
                            result=result,
                            diff=diff,
-                           type_a=top_type, type_b=second_type,
-                           score_a=top_score, score_b=second_score,
+                           type_a=type_a, type_b=type_b,
+                           score_a=score_a, score_b=score_b,
                            TYPE_NAMES=TYPE_NAMES,
-                           done=False)
+                           done=False,
+                           wing_mode=wing_mode,
+                           top_type=top_type)

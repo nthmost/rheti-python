@@ -365,11 +365,13 @@ a.type-card:hover { border-color: var(--accent); text-decoration: none; }
                    border-radius: var(--radius); padding: 1rem 1.25rem;
                    margin-bottom: 1.25rem; font-size: .9rem; color: var(--muted); }
 .diff-cta-banner strong { color: var(--text); }
+.wing-diff-cta { background: #f5f0f5; border-color: #9b6fa8; }
 
 /* ── Differentiation test page ── */
 .diff-page { max-width: 660px; }
 .diff-header { margin-bottom: 2rem; }
 .diff-header h1 { margin: .5rem 0 .75rem; }
+.diff-context-label { font-size: .8rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: #9b6fa8; margin: 0 0 .25rem; }
 .diff-scores { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
 .diff-score-pill { background: var(--surface); border: 1px solid var(--border);
                    border-radius: 99px; padding: .3rem .85rem; font-size: .85rem;

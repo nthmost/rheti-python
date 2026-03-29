@@ -12,18 +12,18 @@
 
   {% if tied_types|length > 1 %}
   <div class="tie-banner">
-    <h2>Your scores show a tie</h2>
+    <h2>Two types tied in your scores</h2>
     <p>
       You scored equally on
       {% for t in tied_types %}
         <strong>Type {{ t }} ({{ tie_context[t].name }})</strong>{% if not loop.last %} and {% endif %}
       {% endfor %}
       — both at <strong>{{ ranking[0][1] }}</strong> points.
-      This is meaningful data: it means your personality draws genuinely from both types.
+      This often happens when two types share similar behaviors — the real distinction is in motivation and what happens under stress.
     </p>
     <p>
-      The clearest way to tell them apart is <strong>stress behavior</strong> and <strong>emotional pattern</strong>.
-      Read both type profiles and ask yourself: which stress description feels uncomfortably familiar?
+      Read both profiles below and ask yourself: which <strong>stress description</strong> feels uncomfortably familiar?
+      That's usually the clearest signal.
     </p>
     <div class="tie-types">
       {% for t in tied_types %}
@@ -60,6 +60,19 @@
     </div>
     <a href="{{ url_for('test.differentiate', result_id=result.id) }}" class="btn btn-primary btn-sm">
       Motivation &amp; Stress →
+    </a>
+  </div>
+  {% endif %}
+
+  {% if wing_diff_pair and tied_types|length <= 1 %}
+  <div class="diff-cta-banner wing-diff-cta">
+    <div>
+      <strong>Your wing is unclear</strong> —
+      your scores for Type {{ wing_diff_pair[0] }} and Type {{ wing_diff_pair[1] }} are very close.
+      A few questions can help identify whether you lean {{ top_type }}w{{ wing_diff_pair[0] }} or {{ top_type }}w{{ wing_diff_pair[1] }}.
+    </div>
+    <a href="{{ url_for('test.differentiate', result_id=result.id, ta=wing_diff_pair[0], tb=wing_diff_pair[1]) }}" class="btn btn-secondary btn-sm">
+      Find My Wing →
     </a>
   </div>
   {% endif %}

@@ -245,7 +245,7 @@ def results(result_id):
             diff = get_differentiator(top_type, other)
             if diff:
                 is_wing = other in adj
-                available_diffs.append({
+                entry = {
                     'type_a': a,
                     'type_b': b,
                     'other': other,
@@ -254,7 +254,14 @@ def results(result_id):
                     'title': diff['title'],
                     'is_wing': is_wing,
                     'gap': abs(scores.get(top_type, 0) - scores.get(other, 0)),
-                })
+                    'wing_code_other': None,
+                    'wing_code_far': None,
+                }
+                if is_wing:
+                    far_adj = [x for x in adj if x != other]
+                    entry['wing_code_other'] = f'{top_type}w{other}'
+                    entry['wing_code_far'] = f'{top_type}w{far_adj[0]}' if far_adj else None
+                available_diffs.append(entry)
     available_diffs.sort(key=lambda d: d['gap'])
 
     return render_template('test/results.html',

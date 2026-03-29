@@ -119,21 +119,24 @@
   </div>
 
   {% if available_diffs %}
+  {% set type_diffs = available_diffs | rejectattr('is_wing') | list %}
+  {% set wing_diffs = available_diffs | selectattr('is_wing') | list %}
   <div class="dig-deeper-section">
     <h2>Motivation &amp; Stress</h2>
     <p class="dig-deeper-intro">
       Type scores reflect behavior — motivation and stress response are what truly distinguish types.
       These short follow-ups each take about 2 minutes.
     </p>
+
+    {% if type_diffs %}
     <div class="dig-deeper-list">
-      {% for d in available_diffs %}
+      {% for d in type_diffs %}
       <a href="{{ url_for('test.differentiate', result_id=result.id, ta=d.type_a, tb=d.type_b) }}"
          class="dig-deeper-card {% if d.gap == 0 %}dig-deeper-tie{% elif d.gap <= 4 %}dig-deeper-close{% endif %}">
         <div class="dig-deeper-pair">
           <span class="dig-pair-label">Type {{ d.type_a }}</span>
           <span class="dig-pair-sep">vs</span>
           <span class="dig-pair-label">Type {{ d.type_b }}</span>
-          {% if d.is_wing %}<span class="dig-wing-badge">wing</span>{% endif %}
         </div>
         <p class="dig-deeper-title">{{ d.title }}</p>
         {% if d.gap == 0 %}
@@ -146,6 +149,31 @@
       </a>
       {% endfor %}
     </div>
+    {% endif %}
+
+    {% if wing_diffs %}
+    <div class="dig-wing-section">
+      <h3 class="dig-wing-heading">Which Wing Are You?</h3>
+      <p class="dig-deeper-intro">Your two adjacent types scored close — these questions help identify whether you lean {{ wing_diffs[0].wing_code_other }} or {{ wing_diffs[0].wing_code_far }}.</p>
+      <div class="dig-deeper-list">
+        {% for d in wing_diffs %}
+        <a href="{{ url_for('test.differentiate', result_id=result.id, ta=d.type_a, tb=d.type_b) }}"
+           class="dig-deeper-card {% if d.gap <= 3 %}dig-deeper-close{% endif %}">
+          <div class="dig-deeper-pair">
+            <span class="dig-pair-label">{{ d.wing_code_other }}</span>
+            <span class="dig-pair-sep">influence?</span>
+          </div>
+          <p class="dig-deeper-title">{{ d.title }}</p>
+          {% if d.gap <= 3 %}
+          <span class="dig-gap-pill dig-gap-close">{{ d.gap }} pt gap</span>
+          {% else %}
+          <span class="dig-gap-pill">{{ d.gap }} pt gap</span>
+          {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
   </div>
   {% endif %}
 

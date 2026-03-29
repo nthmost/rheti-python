@@ -166,6 +166,8 @@ a:hover { text-decoration: underline; }
                    background: #eee; color: var(--muted); white-space: nowrap; }
 .dig-gap-close   { background: #d6ece9; color: #2a6b61; }
 .dig-gap-tie     { background: #cde8e3; color: #1a5c52; }
+.dig-wing-section { margin-top: 1.5rem; border-top: 1px dashed var(--border); padding-top: 1rem; }
+.dig-wing-heading { font-size: 1rem; margin: 0 0 .3rem; color: var(--text); }
 
 /* ── Learn More section ── */
 .learn-section { margin-top: 3rem; }

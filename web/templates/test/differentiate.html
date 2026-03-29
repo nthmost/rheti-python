@@ -25,12 +25,7 @@
     </div>
   </div>
 
-  {% if wing_mode %}
-  {% set _form_action = url_for('test.differentiate', result_id=result.id, ta=type_a, tb=type_b) %}
-  {% else %}
-  {% set _form_action = url_for('test.differentiate', result_id=result.id) %}
-  {% endif %}
-  <form method="post" action="{{ _form_action }}">
+  <form method="post" action="{{ url_for('test.differentiate', result_id=result.id, ta=type_a, tb=type_b) }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="diff-questions">

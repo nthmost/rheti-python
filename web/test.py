@@ -236,25 +236,26 @@ def results(result_id):
             'growth_name': TYPE_NAMES[ARROWS[t]['growth']],
         }
 
-    # Differentiation CTA: top 2 types within DIFF_THRESHOLD points and we have questions for that pair
-    DIFF_THRESHOLD = 4
-    WING_DIFF_THRESHOLD = 3
-    from rheti.differentiators import get_differentiator
-    diff_pair = None
-    if len(ranking) >= 2:
-        second_type, second_score = ranking[1][0], ranking[1][1]
-        if ranking[0][1] - second_score <= DIFF_THRESHOLD:
-            if get_differentiator(top_type, second_type):
-                diff_pair = (top_type, second_type)
-
-    # Wing differentiation CTA: adjacent type scores are close
-    wing_diff_pair = None
-    if len(adj) == 2:
-        adj_s0 = scores.get(adj[0], 0)
-        adj_s1 = scores.get(adj[1], 0)
-        if abs(adj_s0 - adj_s1) <= WING_DIFF_THRESHOLD:
-            if get_differentiator(adj[0], adj[1]):
-                wing_diff_pair = (adj[0], adj[1])
+    # Build all available differentiator pairs involving top_type, ordered by other type's score
+    from rheti.differentiators import get_differentiator, PAIRS
+    available_diffs = []
+    for (a, b) in PAIRS:
+        if a == top_type or b == top_type:
+            other = b if a == top_type else a
+            diff = get_differentiator(top_type, other)
+            if diff:
+                is_wing = other in adj
+                available_diffs.append({
+                    'type_a': a,
+                    'type_b': b,
+                    'other': other,
+                    'score_other': scores.get(other, 0),
+                    'score_top': scores.get(top_type, 0),
+                    'title': diff['title'],
+                    'is_wing': is_wing,
+                    'gap': abs(scores.get(top_type, 0) - scores.get(other, 0)),
+                })
+    available_diffs.sort(key=lambda d: d['gap'])
 
     return render_template('test/results.html',
                            result=result,
@@ -270,8 +271,7 @@ def results(result_id):
                            wing_code=wing_code,
                            wing_info=wing_info,
                            adj_scores={t: scores.get(t, 0) for t in adj},
-                           diff_pair=diff_pair,
-                           wing_diff_pair=wing_diff_pair)
+                           available_diffs=available_diffs)
 
 
 @bp.route('/results/<int:result_id>/review', methods=['GET', 'POST'])
@@ -354,7 +354,7 @@ def differentiate(result_id):
     top_type, top_score = ranking[0]
     second_type, second_score = ranking[1]
 
-    # Wing mode: explicit pair passed as query params (ta, tb are adjacent types)
+    # Explicit pair via query params; wing_mode when both are adjacent to top_type
     ta = request.args.get('ta', type=int)
     tb = request.args.get('tb', type=int)
     wing_mode = False
@@ -363,7 +363,10 @@ def differentiate(result_id):
         type_a, type_b = min(ta, tb), max(ta, tb)
         score_a = scores.get(type_a, 0)
         score_b = scores.get(type_b, 0)
-        wing_mode = True
+        # Wing mode: both types are adjacent to top_type (i.e. we're identifying the wing)
+        adj_types = [top_type - 1 if top_type > 1 else 9,
+                     top_type + 1 if top_type < 9 else 1]
+        wing_mode = (ta in adj_types and tb in adj_types)
     else:
         type_a, type_b = top_type, second_type
         score_a, score_b = top_score, second_score

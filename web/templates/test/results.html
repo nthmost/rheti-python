@@ -51,32 +51,6 @@
   </div>
   {% endif %}
 
-  {% if diff_pair and tied_types|length <= 1 %}
-  <div class="diff-cta-banner">
-    <div>
-      <strong>Your scores are close</strong> —
-      Type {{ diff_pair[0] }} and Type {{ diff_pair[1] }} are within a few points of each other.
-      A short follow-up asks about motivation and stress, which are usually diagnostic.
-    </div>
-    <a href="{{ url_for('test.differentiate', result_id=result.id) }}" class="btn btn-primary btn-sm">
-      Motivation &amp; Stress →
-    </a>
-  </div>
-  {% endif %}
-
-  {% if wing_diff_pair and tied_types|length <= 1 %}
-  <div class="diff-cta-banner wing-diff-cta">
-    <div>
-      <strong>Your wing is unclear</strong> —
-      your scores for Type {{ wing_diff_pair[0] }} and Type {{ wing_diff_pair[1] }} are very close.
-      A few questions can help identify whether you lean {{ top_type }}w{{ wing_diff_pair[0] }} or {{ top_type }}w{{ wing_diff_pair[1] }}.
-    </div>
-    <a href="{{ url_for('test.differentiate', result_id=result.id, ta=wing_diff_pair[0], tb=wing_diff_pair[1]) }}" class="btn btn-secondary btn-sm">
-      Find My Wing →
-    </a>
-  </div>
-  {% endif %}
-
   <div class="results-hero">
     <p class="results-label">{% if tied_types|length > 1 %}Primary Type (tied){% else %}Your Dominant Type{% endif %}</p>
     <h1>Type {{ top_type }} — {{ top_name }}</h1>
@@ -143,6 +117,37 @@
     <p class="score-note">{{ result.n_questions }} questions answered &middot;
       {{ result.completed_at.strftime('%B %d, %Y') }}</p>
   </div>
+
+  {% if available_diffs %}
+  <div class="dig-deeper-section">
+    <h2>Motivation &amp; Stress</h2>
+    <p class="dig-deeper-intro">
+      Type scores reflect behavior — motivation and stress response are what truly distinguish types.
+      These short follow-ups each take about 2 minutes.
+    </p>
+    <div class="dig-deeper-list">
+      {% for d in available_diffs %}
+      <a href="{{ url_for('test.differentiate', result_id=result.id, ta=d.type_a, tb=d.type_b) }}"
+         class="dig-deeper-card {% if d.gap == 0 %}dig-deeper-tie{% elif d.gap <= 4 %}dig-deeper-close{% endif %}">
+        <div class="dig-deeper-pair">
+          <span class="dig-pair-label">Type {{ d.type_a }}</span>
+          <span class="dig-pair-sep">vs</span>
+          <span class="dig-pair-label">Type {{ d.type_b }}</span>
+          {% if d.is_wing %}<span class="dig-wing-badge">wing</span>{% endif %}
+        </div>
+        <p class="dig-deeper-title">{{ d.title }}</p>
+        {% if d.gap == 0 %}
+        <span class="dig-gap-pill dig-gap-tie">tied</span>
+        {% elif d.gap <= 4 %}
+        <span class="dig-gap-pill dig-gap-close">{{ d.gap }} pt gap</span>
+        {% else %}
+        <span class="dig-gap-pill">{{ d.gap }} pt gap</span>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
 
   <div class="results-actions">
     <a href="{{ url_for('test.review_result', result_id=result.id) }}" class="btn btn-primary">Review &amp; Adjust Answers</a>

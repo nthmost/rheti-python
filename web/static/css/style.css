@@ -144,6 +144,29 @@ a:hover { text-decoration: underline; }
 .score-note { margin-top: 1rem; font-size: .85rem; color: var(--muted); }
 .results-actions { margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; }
 
+/* ── Dig Deeper / Differentiation section ── */
+.dig-deeper-section { margin: 2rem 0; border-top: 1.5px solid var(--border); padding-top: 1.5rem; }
+.dig-deeper-section h2 { margin: 0 0 .4rem; }
+.dig-deeper-intro { color: var(--muted); font-size: .9rem; margin: 0 0 1.25rem; }
+.dig-deeper-list { display: flex; flex-direction: column; gap: .6rem; }
+.dig-deeper-card { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+                   padding: .75rem 1rem; border: 1.5px solid var(--border);
+                   border-radius: var(--radius); text-decoration: none; color: var(--text);
+                   background: var(--surface); transition: border-color .15s, background .15s; }
+.dig-deeper-card:hover { border-color: var(--accent); background: #f0f5f4; }
+.dig-deeper-close { border-color: #a8c4bf; background: #f0f5f4; }
+.dig-deeper-tie  { border-color: var(--accent); background: #e8f2f0; }
+.dig-deeper-pair { display: flex; align-items: center; gap: .4rem; font-weight: 600; min-width: 10rem; }
+.dig-pair-label  { font-size: .95rem; }
+.dig-pair-sep    { color: var(--muted); font-size: .8rem; }
+.dig-wing-badge  { font-size: .7rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+                   background: #ede0f5; color: #7a4fa0; border-radius: 4px; padding: 1px 5px; }
+.dig-deeper-title { flex: 1; font-size: .88rem; color: var(--muted); margin: 0; }
+.dig-gap-pill    { font-size: .75rem; font-weight: 600; border-radius: 20px; padding: 2px 8px;
+                   background: #eee; color: var(--muted); white-space: nowrap; }
+.dig-gap-close   { background: #d6ece9; color: #2a6b61; }
+.dig-gap-tie     { background: #cde8e3; color: #1a5c52; }
+
 /* ── Learn More section ── */
 .learn-section { margin-top: 3rem; }
 .learn-section h2 { margin-bottom: 1rem; }

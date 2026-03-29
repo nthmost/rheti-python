@@ -77,6 +77,7 @@
   </div>
 
   <div class="results-actions">
+    <a href="{{ url_for('test.review_result', result_id=result.id) }}" class="btn btn-primary">Review &amp; Adjust Answers</a>
     <form method="post" action="{{ url_for('test.start') }}" style="display:inline">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <button type="submit" class="btn btn-secondary">Retake Test</button>

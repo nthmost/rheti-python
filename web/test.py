@@ -229,3 +229,40 @@ def results(result_id):
                            wing_code=wing_code,
                            wing_info=wing_info,
                            adj_scores={t: scores.get(t, 0) for t in adj})
+
+
+@bp.route('/results/<int:result_id>/review', methods=['GET', 'POST'])
+@login_required
+def review_result(result_id):
+    result = db.session.get(Result, result_id)
+    if not result or result.user_id != current_user.id:
+        abort(404)
+
+    questions = get_questions()
+
+    if request.method == 'POST':
+        new_answers = []
+        for q in questions:
+            code = request.form.get(f'q_{q.qnum}')
+            chosen = next((c for c in q.choices if c.code == code), None)
+            if chosen:
+                new_answers.append({'q': q.qnum, 'choice': code, 'value': chosen.value})
+
+        if len(new_answers) == len(questions):
+            from rheti.scorer import score
+            result_data = score([a['value'] for a in new_answers])
+            result.answers = new_answers
+            result.top_type = result_data['top_type']
+            result.scores = {str(t): c for t, c in result_data['counts'].items()}
+            result.n_questions = len(new_answers)
+            db.session.commit()
+            flash('Answers updated and results recalculated.', 'success')
+            return redirect(url_for('test.results', result_id=result_id))
+        else:
+            flash('Some questions were unanswered — please answer all questions.', 'error')
+
+    current_answers = {a['q']: a['choice'] for a in result.answers}
+    return render_template('test/review.html',
+                           result=result,
+                           questions=questions,
+                           current_answers=current_answers)

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Review Answers — RHETI{% endblock %}
+{% block content %}
+<div class="review-page">
+  <div class="review-header">
+    <h1>Review Your Answers</h1>
+    <p class="review-subtitle">
+      Change any answers below, then save to recalculate your results.
+      Questions where both choices felt equally true are worth a second look.
+    </p>
+    <a href="{{ url_for('test.results', result_id=result.id) }}" class="subtle-link">← Back to results</a>
+  </div>
+
+  <form method="post" action="{{ url_for('test.review_result', result_id=result.id) }}" id="review-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="review-questions">
+      {% for q in questions %}
+      {% set current = current_answers.get(q.qnum) %}
+      <div class="review-q" id="rq-{{ loop.index }}">
+        <span class="review-qnum">{{ loop.index }}</span>
+        <div class="review-choices">
+          {% for choice in q.choices %}
+          <label class="review-choice {% if current == choice.code %}review-choice-selected{% endif %}"
+                 for="rc-{{ q.qnum }}-{{ choice.code }}">
+            <input type="radio" name="q_{{ q.qnum }}" id="rc-{{ q.qnum }}-{{ choice.code }}"
+                   value="{{ choice.code }}" {% if current == choice.code %}checked{% endif %} required>
+            <span class="review-choice-letter">{{ choice.code }}</span>
+            <span class="review-choice-text">{{ choice.text }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="review-actions">
+      <button type="submit" class="btn btn-primary btn-large">Save &amp; Recalculate</button>
+      <a href="{{ url_for('test.results', result_id=result.id) }}" class="btn btn-secondary">Cancel</a>
+      <span class="review-change-count" id="change-count"></span>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Track changes and highlight modified questions
+  const original = {};
+  document.querySelectorAll('input[type="radio"]:checked').forEach(r => {
+    original[r.name] = r.value;
+  });
+
+  function updateChanges() {
+    let changed = 0;
+    document.querySelectorAll('input[type="radio"]').forEach(r => {
+      if (r.checked && original[r.name] !== undefined && r.value !== original[r.name]) {
+        changed++;
+      }
+    });
+    const el = document.getElementById('change-count');
+    el.textContent = changed > 0 ? changed + ' answer' + (changed === 1 ? '' : 's') + ' changed' : '';
+
+    // Update selected styling live
+    document.querySelectorAll('.review-choice').forEach(lbl => {
+      lbl.classList.remove('review-choice-selected', 'review-choice-changed');
+    });
+    document.querySelectorAll('input[type="radio"]:checked').forEach(r => {
+      const lbl = r.closest('.review-choice');
+      if (lbl) {
+        const wasOriginal = original[r.name] === r.value;
+        lbl.classList.add(wasOriginal ? 'review-choice-selected' : 'review-choice-changed');
+      }
+    });
+  }
+
+  document.querySelectorAll('input[type="radio"]').forEach(r => {
+    r.addEventListener('change', updateChanges);
+  });
+</script>
+{% endblock %}

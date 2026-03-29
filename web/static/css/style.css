@@ -304,6 +304,41 @@ a.type-card:hover { border-color: var(--accent); text-decoration: none; }
             border-top: 1px solid var(--border); }
 .type-cta { margin-top: 1.5rem; }
 
+/* ── Review page ── */
+.review-page { max-width: 720px; }
+.review-header { margin-bottom: 1.75rem; }
+.review-header h1 { margin-bottom: .4rem; }
+.review-subtitle { color: var(--muted); margin-bottom: .6rem; }
+
+.review-questions { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; }
+
+.review-q { display: grid; grid-template-columns: 2rem 1fr; gap: .75rem; align-items: start; }
+.review-qnum { font-size: .8rem; font-weight: 700; color: var(--muted); padding-top: .8rem;
+               text-align: right; }
+.review-choices { display: grid; grid-template-columns: 1fr 1fr; gap: .4rem; }
+@media (max-width: 560px) { .review-choices { grid-template-columns: 1fr; } }
+
+.review-choice { display: flex; align-items: flex-start; gap: .5rem;
+                 border: 1.5px solid var(--border); border-radius: var(--radius);
+                 padding: .6rem .75rem; cursor: pointer; background: var(--bg);
+                 transition: border-color .12s, background .12s; }
+.review-choice:hover { border-color: var(--accent); background: #f0f5f4; }
+.review-choice input[type="radio"] { margin-top: .2rem; accent-color: var(--accent);
+                                     flex-shrink: 0; }
+.review-choice-letter { font-weight: 700; color: var(--muted); flex-shrink: 0;
+                        font-size: .85rem; width: .9rem; }
+.review-choice-text { font-size: .85rem; line-height: 1.45; color: var(--text); }
+
+.review-choice-selected { border-color: var(--accent); background: #f0f5f4; }
+.review-choice-selected .review-choice-letter { color: var(--accent); }
+.review-choice-changed { border-color: var(--warn); background: #fefdf0; }
+.review-choice-changed .review-choice-letter { color: var(--warn); }
+
+.review-actions { position: sticky; bottom: 0; background: var(--bg);
+                  border-top: 1px solid var(--border); padding: 1rem 0;
+                  display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
+.review-change-count { font-size: .85rem; color: var(--warn); font-weight: 600; }
+
 /* ── Auth forms ── */
 .auth-page { max-width: 400px; margin: 0 auto; }
 .auth-page h1 { margin-bottom: 1.25rem; }

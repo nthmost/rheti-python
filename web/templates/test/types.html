@@ -11,9 +11,12 @@
   <div class="type-detail" id="type-{{ num }}">
     <div class="type-detail-header">
       <span class="type-num-large">{{ num }}</span>
-      <h2>{{ name }}</h2>
+      <h2><a href="{{ url_for('test.type_detail', type_num=num) }}">{{ name }}</a></h2>
     </div>
     <p class="type-detail-body">{{ desc }}</p>
+    <a href="{{ url_for('test.type_detail', type_num=num) }}" class="type-detail-link">
+      Wings, stress &amp; growth, levels of development →
+    </a>
   </div>
   {% endfor %}
 

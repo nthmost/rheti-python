@@ -157,18 +157,39 @@ def finish():
 @bp.route('/types')
 def types():
     from rheti.scorer import TYPE_DESCRIPTIONS
-    types = [
-        (1, 'The Reformer',     TYPE_DESCRIPTIONS[1]),
-        (2, 'The Helper',       TYPE_DESCRIPTIONS[2]),
-        (3, 'The Achiever',     TYPE_DESCRIPTIONS[3]),
-        (4, 'The Individualist',TYPE_DESCRIPTIONS[4]),
-        (5, 'The Investigator', TYPE_DESCRIPTIONS[5]),
-        (6, 'The Loyalist',     TYPE_DESCRIPTIONS[6]),
-        (7, 'The Enthusiast',   TYPE_DESCRIPTIONS[7]),
-        (8, 'The Challenger',   TYPE_DESCRIPTIONS[8]),
-        (9, 'The Peacemaker',   TYPE_DESCRIPTIONS[9]),
-    ]
+    from rheti.types import TYPE_NAMES
+    types = [(n, TYPE_NAMES[n], TYPE_DESCRIPTIONS[n]) for n in range(1, 10)]
     return render_template('test/types.html', types=types)
+
+
+@bp.route('/types/<int:type_num>')
+def type_detail(type_num):
+    if type_num not in range(1, 10):
+        abort(404)
+    from rheti.scorer import TYPE_DESCRIPTIONS
+    from rheti.types import (TYPE_NAMES, TYPE_CENTER, CENTERS, ARROWS,
+                              STRESS_DESC, GROWTH_DESC, WINGS, LEVELS, FAMOUS)
+    center_key = TYPE_CENTER[type_num]
+    arrows = ARROWS[type_num]
+    prev_type = type_num - 1 if type_num > 1 else 9
+    next_type = type_num + 1 if type_num < 9 else 1
+    return render_template('test/type_detail.html',
+                           num=type_num,
+                           name=TYPE_NAMES[type_num],
+                           description=TYPE_DESCRIPTIONS[type_num],
+                           center=CENTERS[center_key],
+                           wings=WINGS[type_num],
+                           stress_type=arrows['stress'],
+                           stress_name=TYPE_NAMES[arrows['stress']],
+                           stress_desc=STRESS_DESC[type_num],
+                           growth_type=arrows['growth'],
+                           growth_name=TYPE_NAMES[arrows['growth']],
+                           growth_desc=GROWTH_DESC[type_num],
+                           levels=LEVELS[type_num],
+                           famous=FAMOUS[type_num],
+                           prev_type=prev_type,
+                           next_type=next_type,
+                           TYPE_NAMES=TYPE_NAMES)
 
 
 @bp.route('/results/<int:result_id>')

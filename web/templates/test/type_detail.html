@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Type {{ num }} — {{ name }} — Enneagram{% endblock %}
+{% block content %}
+<div class="type-detail-page">
+
+  <div class="type-detail-hero type-hero-{{ num }}">
+    <div class="type-hero-num">{{ num }}</div>
+    <div>
+      <p class="type-hero-label">Enneagram Type {{ num }}</p>
+      <h1>{{ name }}</h1>
+    </div>
+  </div>
+
+  <p class="type-overview">{{ description }}</p>
+
+  <div class="type-center-badge">
+    <strong>{{ center.name }}</strong>
+    <span>{{ center.desc }}</span>
+  </div>
+
+  <div class="type-sections">
+
+    <section class="type-section">
+      <h2>Wings</h2>
+      <p class="section-intro">Your dominant type is usually colored by one of its two neighboring types — called a <em>wing</em>.</p>
+      <div class="wings-grid">
+        {% for code, (wing_name, wing_desc) in wings.items() %}
+        <div class="wing-card">
+          <strong>{{ code }} — {{ wing_name }}</strong>
+          <p>{{ wing_desc }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="type-section">
+      <h2>Stress &amp; Growth</h2>
+      <p class="section-intro">Each type has two dynamic directions — where it goes under pressure, and where it moves in genuine development.</p>
+      <div class="arrows-grid">
+        <div class="arrow-card arrow-stress">
+          <div class="arrow-header">
+            <span class="arrow-label">Under Stress</span>
+            <a href="{{ url_for('test.type_detail', type_num=stress_type) }}" class="arrow-type">
+              → Type {{ stress_type }}: {{ stress_name }}
+            </a>
+          </div>
+          <p>{{ stress_desc }}</p>
+        </div>
+        <div class="arrow-card arrow-growth">
+          <div class="arrow-header">
+            <span class="arrow-label">In Growth</span>
+            <a href="{{ url_for('test.type_detail', type_num=growth_type) }}" class="arrow-type">
+              → Type {{ growth_type }}: {{ growth_name }}
+            </a>
+          </div>
+          <p>{{ growth_desc }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="type-section">
+      <h2>Levels of Development</h2>
+      <p class="section-intro">Each type expresses itself across a spectrum from healthy to unhealthy functioning.</p>
+      <div class="levels-list">
+        <div class="level-row level-healthy">
+          <span class="level-label">Healthy</span>
+          <p>{{ levels.healthy }}</p>
+        </div>
+        <div class="level-row level-average">
+          <span class="level-label">Average</span>
+          <p>{{ levels.average }}</p>
+        </div>
+        <div class="level-row level-unhealthy">
+          <span class="level-label">Unhealthy</span>
+          <p>{{ levels.unhealthy }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="type-section">
+      <h2>Notable Examples</h2>
+      <p class="section-intro">Prominent figures often associated with Type {{ num }}.</p>
+      <div class="famous-list">
+        {% for person in famous %}
+        <span class="famous-pill">{{ person }}</span>
+        {% endfor %}
+      </div>
+      <p class="famous-caveat">Type attribution is speculative — Enneagram type can only be self-confirmed.</p>
+    </section>
+
+  </div>
+
+  <div class="type-nav">
+    <a href="{{ url_for('test.type_detail', type_num=prev_type) }}" class="btn btn-secondary">
+      ← Type {{ prev_type }}: {{ TYPE_NAMES[prev_type] }}
+    </a>
+    <a href="{{ url_for('test.types') }}" class="btn btn-secondary">All Types</a>
+    <a href="{{ url_for('test.type_detail', type_num=next_type) }}" class="btn btn-secondary">
+      Type {{ next_type }}: {{ TYPE_NAMES[next_type] }} →
+    </a>
+  </div>
+
+  <div class="type-cta">
+    {% if current_user.is_authenticated %}
+      <form method="post" action="{{ url_for('test.start') }}" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="btn btn-primary">Take the Test</button>
+      </form>
+    {% else %}
+      <a href="{{ url_for('auth.register') }}" class="btn btn-primary">Create Account &amp; Take Test</a>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}
